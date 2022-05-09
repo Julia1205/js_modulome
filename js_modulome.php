@@ -21,6 +21,7 @@ class js_modulome extends Module
         || !$this->installdb()
         || !$this->registerHook('displayHeader')
         || !$this->registerHook('actionFrontControllerSetMedia')
+        || !$this->installTab('AdminCatalog', 'AdminFormulaire', 'Gérer les modules')
         )
         {
             return false;
@@ -54,6 +55,23 @@ class js_modulome extends Module
         ');
         return $sql;
     }
+
+    public function installTab($parent, $admincontroller, $name)
+    {
+        $tab = new Tab();
+        $tab->id_parent = (int)Tab::getIdFromClassName($parent);
+        $tab->name = [];
+            foreach(Language::getLanguages(true) as $lang)
+            {
+                $tab->name[$lang['id_lang']] = $name;
+            }
+
+        $tab->class_name = $admincontroller;
+        $tab->module = $this->name;
+        $tab->active = 1;
+
+        return $tab->add();
+}
 
     public function uninstall()
     {
@@ -97,8 +115,6 @@ class js_modulome extends Module
                     $output .= $this->displayConfirmation('C\'est bien enregistré tqt');
                 }
             }
-
-
 
         }
         return $output.$this->displayForm();
