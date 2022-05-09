@@ -10,8 +10,12 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
 
     public function postProcess()
     {
+        $nbBedrooms = Tools::getValue('nbBedrooms');
+        
         if(Tools::isSubmit('submitpart1')){
-            Tools::dieObject($_POST);
+            $this->context->smarty->assign([
+                'nbbedrooms' => Tools::getValue('nbBedrooms'),
+            ]);
         }
     }
 

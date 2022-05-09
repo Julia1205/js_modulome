@@ -42,12 +42,15 @@ class js_modulome extends Module
             id_modulome INT NOT NULL AUTO_INCREMENT,
             modulome_cat_id INT NOT NULL,
             modulome_size INT NOT NULL,
-            modulome_type TEXT NOT NULL,
+            modulome_price TEXT NOT NULL,
             modulome_name TEXT NOT NULL,
             modulome_image TEXT NOT NULL,
             PRIMARY KEY(id_modulome),
             CONSTRAINT FK_cat FOREIGN KEY (modulome_cat_id) REFERENCES '._DB_PREFIX_.'modulome_category(id_modulome_category)
             )ENGINE = '._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;
+            INSERT INTO '._DB_PREFIX_.'modulome_category (cat_name) VALUES ("salle de bains"), ("pièce à vivre"), ("salle d\'eau"), ("cuisine"), ("chambre");
+            INSERT INTO '._DB_PREFIX_.'modulome (modulome_cat_id, modulome_size, modulome_price, modulome_name, modulome_image) VALUES 
+            ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "chambre"), 10, 15000, "modulome B10", "test");
         ');
         return $sql;
     }
@@ -83,6 +86,20 @@ class js_modulome extends Module
                 $output .= $this->displayError('Une erreur est survenue, merci de ré-essayer.');
             }
 
+            $image = Tools::getValue('IMAGE_FORMULAIRE');
+            if($image || !empty($image) && Validate::isImageTypeName($image))
+            {
+                if(!move_uploaded_file($_FILES['IMAGE_FORMULAIRE']['tmp_name'], dirname(__FILE__).'/views/images/'.$image))
+                {
+                    $output .= $this->displayError('L\'image n\'a pas pû être enregistrée.');
+                }else{
+                    Configuration::updateValue('IMAGE_FORMULAIRE', $image);
+                    $output .= $this->displayConfirmation('C\'est bien enregistré tqt');
+                }
+            }
+
+
+
         }
         return $output.$this->displayForm();
     }
@@ -90,6 +107,10 @@ class js_modulome extends Module
 
     public function displayForm()
     {
+        if(Configuration::get('IMAGE_FORMULAIRE')){
+            $lien = _MODULE_DIR_.$this->name.'/views/images/'.Configuration::get('IMAGE_FORMULAIRE');
+        }
+
         $form_configuration['0']['form'] = 
         [
             'legend' =>[
@@ -116,6 +137,12 @@ class js_modulome extends Module
                             'label' => $this->l('Non')
                         ],
                     ]
+                ],
+                [
+                    'type' => 'file', 
+                    'label' => $this->l("Image d'accueil du formulaire"),
+                    'name' => 'IMAGE_FORMULAIRE',
+                    'image' => (isset($lien) && $lien ? '<img src="'.$lien.'" width="200px" height="auto" />': false),
                 ]
             ],
             'submit' => [
@@ -136,6 +163,8 @@ class js_modulome extends Module
 
         //remplissage des champs avec les données dans la bdd
         $helper->fields_value['DISPLAY'] = Tools::getValue('DISPLAY', Configuration::get('DISPLAY'));
+        $helper->fields_value['IMAGE_FORMULAIRE'] = Tools::getValue('IMAGE_FORMULAIRE', Configuration::get('IMAGE_FORMULAIRE'));
+
 
         //génération du formulaire
         return $helper->generateForm($form_configuration);
