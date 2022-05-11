@@ -197,7 +197,7 @@ class js_modulome extends Module
         if(Configuration::get('DISPLAY')){
             $this->context->smarty->assign(
                 [
-                    'lien' => $lien
+                    'lien' => $lien,
                 ]
             );
         }
@@ -206,8 +206,12 @@ class js_modulome extends Module
 
     public function hookActionFrontControllerSetMedia()
     {
-        $css = $this->context->controller->registerJavascript('module-module-js', 'modules/'.$this->name.'/views/assets/js/modulome.js' );
-        
+        $this->context->controller->registerJavascript('module-module-js', 'modules/'.$this->name.'/views/assets/js/modulome.js', [
+            'priority' => 200,
+            'postion' => 'bottom',
+            ] 
+        );
+    
     }
 
 

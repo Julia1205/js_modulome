@@ -5,7 +5,23 @@ function targett() {
 $("#nbBedrooms[val='1']").click(function(){
     alert('hello');
 });
-if (document.getElementById("nbBedrooms").onclick.getElementsByClassName('1bed')){
-    function targett(){}
-}
-    
+
+$('.radio').click(function(){
+    var radios = document.getElementsByName('nbBedrooms');
+    var valeur;
+    for(var i = 0; i < radios.length; i++){
+        if(radios[i].checked){
+            valeur = radios[i].value;
+            console.log(valeur);
+        }
+    }
+});
+
+
+
+$('#bedroomSize').change(function(){
+    liste = document.getElementById("bedroomSize");
+    texte = liste.options[liste.selectedIndex].value;
+    console.log(texte);
+});
+

@@ -12,7 +12,7 @@ class AdminFormulaireController extends ModuleAdminController
 
         parent::__construct();
 
-        $this->field_list = 
+        $this->fields_list = 
         [
             'id_modulome' => 
             [
@@ -41,10 +41,13 @@ class AdminFormulaireController extends ModuleAdminController
         ];
         $this->addRowAction('delete');
         $this->addRowAction('edit');
+
+
     }
 
     public function renderForm()
     {
+        //Tools::dieObject('hello');
         $moduleCat = new DbQuery();
         $moduleCat->select('modulome_cat_id')->from('modulome');
 
