@@ -20,7 +20,7 @@ $('.radio').click(function(){
 
 
 $('#bedroomSize').change(function(){
-    liste = document.getElementById("bedroomSize");
+    liste = document.getElementById("bedroomSizes");
     texte = liste.options[liste.selectedIndex].value;
     console.log(texte);
 });
