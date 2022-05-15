@@ -12,6 +12,7 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
     {
         $nbBedrooms = Tools::getValue('nbBedrooms');
         $bedroomSize = array();
+        $bathrooms = array();
         $sql = new DbQuery();
         $result = $sql->select('*')->from('modulome_category')->where('cat_name = "chambre"');
         //Tools::dieObject($result);
@@ -37,7 +38,6 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
         if(Tools::isSubmit('submitpart3')){
             for ($i=0; $i < $nbBedrooms; $i++) { 
                 $bedroomSize[] = Tools::getValue('bedroomSize-'.$i);
-                var_dump($bedroomSize);
                 $this->context->smarty->assign([
                     'step' => 3,
                     'nbbedrooms' => $nbBedrooms,
@@ -54,34 +54,107 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
             ]);
             for ($i=0; $i < $nbBedrooms; $i++) { 
                 $bedroomSize[] = Tools::getValue('bedroomSize-'.$i);
-                var_dump($bedroomSize);
                 $this->context->smarty->assign([
                     'bedroomsSizes' => $bedroomSize
                 ]);
             }
             if(Tools::getValue('livingroomType') === "separated"){
                 $this->context->smarty->assign([
-                    'LivingroomSize' => Tools::getValue('LivingroomSize'),
-                    'KitchenSize' => Tools::getValue('KitchenSize')
+                     'livingroomSize' => Tools::getValue('livingroomSize'),
+                     'kitchenSize' => Tools::getValue('kitchenSize')
                 ]);
             }
             if(Tools::getValue('livingroomType') === "open"){
-                for ($i=0; $i < $nbBedrooms; $i++) { 
-                    $bedroomSize[] = Tools::getValue('bedroomSize-'.$i);
-                    var_dump($bedroomSize);
-                    $this->context->smarty->assign([
-                        'step' => 4,
-                        'nbbedrooms' => $nbBedrooms,
-                        'bedroomsSizes' => $bedroomSize,
-                        'livingroomType' => Tools::getValue('livingroomType'),
-                        'LivingroomSize' => Tools::getValue('LivingroomSize'),
-                    ]);
-                }
+                $this->context->smarty->assign([
+                    'livingroomSize' => Tools::getValue('livingroomSize'),
+                ]);
             }
         }
         if(Tools::isSubmit('submitpart5')){
-            Tools::dieObject(Tools::getValue('equiped'));
+            $this->context->smarty->assign([
+                'step' => 5,
+                'nbbedrooms' => $nbBedrooms,
+                'livingroomType' => Tools::getValue('livingroomType'),
+                'equiped' => Tools::getValue('equiped')
+            ]);
+            for ($i=0; $i < $nbBedrooms; $i++) { 
+                $bedroomSize[] = Tools::getValue('bedroomSize-'.$i);
+                $this->context->smarty->assign([
+                    'bedroomsSizes' => $bedroomSize
+                ]);
+            }
+            if(Tools::getValue('livingroomType') === "separated"){
+                $this->context->smarty->assign([
+                     'livingroomSize' => Tools::getValue('livingroomSize'),
+                     'kitchenSize' => Tools::getValue('kitchenSize')
+                ]);
+            }
+            if(Tools::getValue('livingroomType') === "open"){
+                $this->context->smarty->assign([
+                    'livingroomSize' => Tools::getValue('livingroomSize'),
+                ]);
+            }
         }
+        if(Tools::isSubmit('submitpart6')){
+            $this->context->smarty->assign([
+                'step' => 6,
+                'nbbedrooms' => $nbBedrooms,
+                'livingroomType' => Tools::getValue('livingroomType'),
+                'equiped' => Tools::getValue('equiped'),
+                'nbbathroom' => Tools::getValue('nbbathroom')
+            ]);
+            for ($i=0; $i < $nbBedrooms; $i++) { 
+                $bedroomSize[] = Tools::getValue('bedroomSize-'.$i);
+                $this->context->smarty->assign([
+                    'bedroomsSizes' => $bedroomSize
+                ]);
+            }
+            if(Tools::getValue('livingroomType') === "separated"){
+                $this->context->smarty->assign([
+                     'livingroomSize' => Tools::getValue('livingroomSize'),
+                     'kitchenSize' => Tools::getValue('kitchenSize')
+                ]);
+            }
+            if(Tools::getValue('livingroomType') === "open"){
+                $this->context->smarty->assign([
+                    'livingroomSize' => Tools::getValue('livingroomSize'),
+                ]);
+            }
+        }
+        if(Tools::isSubmit('submitpart7')){
+            $this->context->smarty->assign([
+                'step' => 7,
+                'nbbedrooms' => $nbBedrooms,
+                'livingroomType' => Tools::getValue('livingroomType'),
+                'equiped' => Tools::getValue('equiped'),
+                'nbbathroom' => Tools::getValue('nbbathroom')
+            ]);
+            for ($i=0; $i < $nbBedrooms; $i++) { 
+                $bedroomSize[] = Tools::getValue('bedroomSize-'.$i);
+                $this->context->smarty->assign([
+                    'bedroomsSizes' => $bedroomSize
+                ]);
+            }
+            if(Tools::getValue('livingroomType') === "separated"){
+                $this->context->smarty->assign([
+                     'livingroomSize' => Tools::getValue('livingroomSize'),
+                     'kitchenSize' => Tools::getValue('kitchenSize')
+                ]);
+            }
+            if(Tools::getValue('livingroomType') === "open"){
+                $this->context->smarty->assign([
+                    'livingroomSize' => Tools::getValue('livingroomSize'),
+                ]);
+            }
+            $nbbathroom = Tools::getValue('nbbathroom');
+            for ($j=1; $j <= $nbbathroom; $j++){
+                $bathroomswithtoilet[] = Tools::getValue('bathroom-'.$j);
+                $this->context->smarty->assign([
+                    'bathroomswithtoilet' => $bathroomswithtoilet
+                ]);
+            }
+        }
+
        
     }
 

@@ -9,8 +9,8 @@
 
 			{if isset($step)}
 
+				step : <input type="text" value="{$step}" class="step"><br>
 				{if $step eq 1}
-					<input type="text" value="{$step}" class="step"><br>
 					<input type="text" value="{$nbbedrooms}"  class="nbbedrooms" name="nbBedrooms"><br>
 					<h2>Quelle surface de chambre souhaitez-vous?</h2>
 					{for $foo=1 to $nbbedrooms}
@@ -26,7 +26,6 @@
 					<input type="submit" name="submitpart2" value="Suivant">
 
 				{elseif $step eq 2}
-					Step : <input type="text" value="{$step}" class="step"><br>
 					nbBedrooms : <input type="text" value="{$nbbedrooms}" name="nbBedrooms" class="nbbedrooms"><br>
 					{foreach from=$bedroomsSizes key=k item=bedroomSize}<br>
 						bedroom{$k}Size : <input type="text" name="bedroomSize-{$k}" value="{$bedroomSize}"> <br>
@@ -47,18 +46,17 @@
 					<input type="submit" name="submitpart3" value="Suivant">
 
 				{elseif $step eq 3}
-					Step : <input type="text" value="{$step}" class="step"><br>
 					nbBedrooms : <input type="text" value="{$nbbedrooms}" name="nbBedrooms" class="nbbedrooms"><br>
 					{foreach from=$bedroomsSizes key=k item=bedroomSize}
 						bedroomSize-{$k} : <input type="text" name="bedroomSize-{$k}" value="{$bedroomSize}"> <br>
 					{/foreach}
-					livingroomType : <input type="text" value="{$livingroomType}"><br>
+					livingroomType : <input type="text" value="{$livingroomType}" name="livingroomType"><br>
 					{if $livingroomType eq "open"}
 					<h2>Quelle surface de pièce à vivre souhaitez-vous ?</h2>
 					<br>
 						Concept à aire ouverte
-						<label for="LivingroomSize"> Surface totale de la pièce : </label>
-						<select name="LivingroomSize" id="LivingroomSize">
+						<label for="livingroomSize"> Surface totale de la pièce : </label>
+						<select name="livingroomSize" id="livingroomSize">
 							<option value="10">10 m <sup>2</sup> </option>
 							<option value="12">12 m <sup>2</sup> </option>
 							<option value="15">15 m <sup>2</sup> </option>
@@ -69,16 +67,16 @@
 						<br>
 						
 						<h2>Quelle surface de cuisine souhaitez-vous ?</h2>
-						<label for="KitchenSize"> Surface de la cuisine : </label>
-						<select name="KitchenSize" id="KitchenSize">
+						<label for="kitchenSize"> Surface de la cuisine : </label>
+						<select name="kitchenSize" id="kitchenSize">
 							<option value="10">10 m <sup>2</sup> </option>
 							<option value="12">12 m <sup>2</sup> </option>
 							<option value="15">15 m <sup>2</sup> </option>
 							<option value="18">18 m <sup>2</sup> </option>
 						</select>
 						<h2>Quelle surface de séjour souhaitez-vous ?</h2>
-						<label for="LivingroomSize"> Surface du séjour : </label>
-						<select name="LivingroomSize" id="LivingroomSize">
+						<label for="livingroomSize"> Surface du séjour : </label>
+						<select name="livingroomSize" id="livingroomSize">
 							<option value="10">10 m <sup>2</sup> </option>
 							<option value="12">12 m <sup>2</sup> </option>
 							<option value="15">15 m <sup>2</sup> </option>
@@ -88,17 +86,16 @@
 						<input type="submit" name="submitpart4" value="Suivant">
 
 				{elseif $step eq 4}
-						Step : <input type="text" value="{$step}" class="step"> <br>
 						nbBedrooms : <input type="text" value="{$nbbedrooms}" name="nbBedrooms" class="nbbedrooms"><br>
 						{foreach from=$bedroomsSizes key=k item=bedroomSize}
 							bedroomSize-{$k} : <input type="text" name="bedroomSize-{$k}" value="{$bedroomSize}"> <br>
 						{/foreach}
-						livingroomType : <input type="text" value="{$livingroomType}"><br>
-						{if $livingroomType eq false}
-							LivingroomSize : <input type="text" value="{$LivingroomSize}"><br>
-							KitchenSize : <input type="text" value="{$KitchenSize}"><br>
+						livingroomType : <input type="text" value="{$livingroomType}" name="livingroomType"><br>
+						{if $livingroomType eq "separated"}
+							livingroomSize : <input type="text" value="{$livingroomSize}" name="livingroomSize"><br>
+							kitchenSize : <input type="text" value="{$kitchenSize}" name="kitchenSize"><br>
 						{else}
-							LivingroomSize : <input type="text" value="{$LivingroomSize}"><br>
+							livingroomSize : <input type="text" value="{$livingroomSize}" name="livingroomSize"><br>
 						{/if}
 						<h2>Souhaitez-vous une cuisine équipée ?</h2>
 						<div>
@@ -110,14 +107,75 @@
 							<label for="equiped">Non</label>
 						</div>
 						<input type="submit" name="submitpart5" value="Suivant">
+
 					{elseif $step eq 5}
+						nbBedrooms : <input type="text" value="{$nbbedrooms}" name="nbBedrooms" class="nbbedrooms"><br>
+						{foreach from=$bedroomsSizes key=k item=bedroomSize}
+							bedroomSize-{$k} : <input type="text" name="bedroomSize-{$k}" value="{$bedroomSize}"> <br>
+						{/foreach}
+						livingroomType : <input type="text" value="{$livingroomType}" name="livingroomType"><br>
+						{if $livingroomType eq "separated"}
+							livingroomSize : <input type="text" value="{$livingroomSize}" name="livingroomSize"><br>
+							kitchenSize : <input type="text" value="{$kitchenSize}" name="kitchenSize"><br>
+						{else}
+							livingroomSize : <input type="text" value="{$livingroomSize}" name="livingroomSize"><br>
+						{/if}
+						equiped : <input type="text" value="{$equiped}" name="equiped">
+						<h2>Combien de salle de bain souhaitez-vous ?</h2>
+						<label for="nbbathroom"> Nombre de salles de bain : </label>
+						<select name="nbbathroom" id="nbbathroom">
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+						</select>
+						<input type="submit" name="submitpart6" value="Suivant">
 
+					{elseif $step eq 6}
 
-
-
-
+						nbBedrooms : <input type="text" value="{$nbbedrooms}" name="nbBedrooms" class="nbbedrooms"><br>
+						{foreach from=$bedroomsSizes key=k item=bedroomSize}
+							bedroomSize-{$k} : <input type="text" name="bedroomSize-{$k}" value="{$bedroomSize}"> <br>
+						{/foreach}
+						livingroomType : <input type="text" value="{$livingroomType}" name="livingroomType"><br>
+						{if $livingroomType eq "separated"}
+							livingroomSize : <input type="text" value="{$livingroomSize}" name="livingroomSize"><br>
+							kitchenSize : <input type="text" value="{$kitchenSize}" name="kitchenSize"><br>
+						{else}
+							livingroomSize : <input type="text" value="{$livingroomSize}" name="livingroomSize"><br>
+						{/if}
+						equiped : <input type="text" value="{$equiped}" name="equiped">
+						nbbathroom : <input type="text" value="{$nbbathroom}" name="nbbathroom">
+						<h2>Pour chaque salle de bain, indiquez si vous souhaitez des WC séparés</h2>
+						{for $bar=1 to $nbbathroom}
+							<h3>Salle de bain numéro {$bar}, souhaitez-vous des WC séparés?</h3>
+							<div>
+								<input type="radio" name="bathroom-{$bar}" class="radio" value="1" id="bathroom">
+								<label for="bathroom-{$bar}">Oui</label>
+							</div>
+							<div>
+								<input type="radio" name="nbbathroom-{$bar}" class="radio" value="0" id="bathroom">
+								<label for="bathroom-{$bar}">Non</label>
+							</div>
+						{/for}
+						<input type="submit" name="submitpart7" value="Suivant">
+					{elseif $step eq 7}
+						nbBedrooms : <input type="text" value="{$nbbedrooms}" name="nbBedrooms" class="nbbedrooms"><br>
+						{foreach from=$bedroomsSizes key=k item=bedroomSize}
+							bedroomSize-{$k} : <input type="text" name="bedroomSize-{$k}" value="{$bedroomSize}"> <br>
+						{/foreach}
+						livingroomType : <input type="text" value="{$livingroomType}" name="livingroomType"><br>
+						{if $livingroomType eq "separated"}
+							livingroomSize : <input type="text" value="{$livingroomSize}" name="livingroomSize"><br>
+							kitchenSize : <input type="text" value="{$kitchenSize}" name="kitchenSize"><br>
+						{else}
+							livingroomSize : <input type="text" value="{$livingroomSize}" name="livingroomSize"><br>
+						{/if}
+						equiped : <input type="text" value="{$equiped}" name="equiped">
+						nbbathroom : <input type="text" value="{$nbbathroom}" name="nbbathroom">
+						{foreach from=$bathroomswithtoilet key=c item=bathroomwithtoilet}
+						salle de bain {$c}<input type="text" value="{$bathroomwithtoilet}" name="bathroomwithtoilet-{$c}">
+						{/foreach}
 				{/if}
-
 			{else}
 			    <h2>Combien de chambres souhaitez-vous?</h2>
 				<div>
@@ -142,6 +200,5 @@
 				</div>
 			<input type="submit" name="submitpart1" value="Suivant">
 			{/if}
-
 		</form>
 	{/block}
