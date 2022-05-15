@@ -11,6 +11,7 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
     public function postProcess()
     {
         $nbBedrooms = Tools::getValue('nbBedrooms');
+        $bedroomSize = array();
         $sql = new DbQuery();
         $result = $sql->select('*')->from('modulome_category')->where('cat_name = "chambre"');
         //Tools::dieObject($result);
@@ -23,9 +24,6 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
             ]);
         }
         if(Tools::isSubmit('submitpart2')){
-            //Tools::dieObject(Tools::getValue('bedroomSize-2'));
-            //Tools::dieObject(Tools::getValue('nbBedrooms'));
-            $bedroomSize = array();
             for ($i=1; $i <= $nbBedrooms; $i++) { 
                 $bedroomSize[] = Tools::getValue('bedroomSize-'.$i);
                 var_dump($bedroomSize);
@@ -37,8 +35,7 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
             }
         }
         if(Tools::isSubmit('submitpart3')){
-            $bedroomSize = array();
-            for ($i=1; $i <= $nbBedrooms; $i++) { 
+            for ($i=0; $i < $nbBedrooms; $i++) { 
                 $bedroomSize[] = Tools::getValue('bedroomSize-'.$i);
                 var_dump($bedroomSize);
                 $this->context->smarty->assign([
@@ -49,8 +46,43 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
                 ]);
             }
         }
-
-        
+        if(Tools::isSubmit('submitpart4')){
+            $this->context->smarty->assign([
+                'step' => 4,
+                'nbbedrooms' => $nbBedrooms,
+                'livingroomType' => Tools::getValue('livingroomType'),
+            ]);
+            for ($i=0; $i < $nbBedrooms; $i++) { 
+                $bedroomSize[] = Tools::getValue('bedroomSize-'.$i);
+                var_dump($bedroomSize);
+                $this->context->smarty->assign([
+                    'bedroomsSizes' => $bedroomSize
+                ]);
+            }
+            if(Tools::getValue('livingroomType') === "separated"){
+                $this->context->smarty->assign([
+                    'LivingroomSize' => Tools::getValue('LivingroomSize'),
+                    'KitchenSize' => Tools::getValue('KitchenSize')
+                ]);
+            }
+            if(Tools::getValue('livingroomType') === "open"){
+                for ($i=0; $i < $nbBedrooms; $i++) { 
+                    $bedroomSize[] = Tools::getValue('bedroomSize-'.$i);
+                    var_dump($bedroomSize);
+                    $this->context->smarty->assign([
+                        'step' => 4,
+                        'nbbedrooms' => $nbBedrooms,
+                        'bedroomsSizes' => $bedroomSize,
+                        'livingroomType' => Tools::getValue('livingroomType'),
+                        'LivingroomSize' => Tools::getValue('LivingroomSize'),
+                    ]);
+                }
+            }
+        }
+        if(Tools::isSubmit('submitpart5')){
+            Tools::dieObject(Tools::getValue('equiped'));
+        }
+       
     }
 
 }
