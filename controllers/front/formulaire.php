@@ -13,11 +13,6 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
         $nbBedrooms = Tools::getValue('nbBedrooms');
         $bedroomSize = array();
         $bathrooms = array();
-        $sql = new DbQuery();
-        $result = $sql->select('*')->from('modulome_category')->where('cat_name = "chambre"');
-        //Tools::dieObject($result);
-        $sql1 = new DbQuery(); 
-        $sql->select('*')->from('modulome')->where('modulome_cat_id = '.$sql);
         if(Tools::isSubmit('submitpart1')){
             $this->context->smarty->assign([
                 'step' => 1,
@@ -148,7 +143,7 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
             }
             $nbbathroom = Tools::getValue('nbbathroom');
             for ($j=1; $j <= $nbbathroom; $j++){
-                $bathroomswithtoilet[] = Tools::getValue('bathroom-'.$j);
+                $bathroomswithtoilet[] = (int)Tools::getValue('bathroom-'.$j);
                 $this->context->smarty->assign([
                     'bathroomswithtoilet' => $bathroomswithtoilet
                 ]);

@@ -46,12 +46,19 @@ class js_modulome extends Module
             modulome_price TEXT NOT NULL,
             modulome_name TEXT NOT NULL,
             modulome_image TEXT NOT NULL,
-            PRIMARY KEY(id_modulome),
-            CONSTRAINT FK_cat FOREIGN KEY (modulome_cat_id) REFERENCES '._DB_PREFIX_.'modulome_category(id_modulome_category)
+            PRIMARY KEY(id_modulome)
             )ENGINE = '._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;
-            INSERT INTO '._DB_PREFIX_.'modulome_category (cat_name) VALUES ("salle de bains"), ("pièce à vivre"), ("salle d\'eau"), ("cuisine"), ("chambre");
+            INSERT INTO '._DB_PREFIX_.'modulome_category (cat_name) VALUES ("salle de bains"), ("pièce à vivre"), ("salle d\'eau"), ("chambre");
             INSERT INTO '._DB_PREFIX_.'modulome (modulome_cat_id, modulome_size, modulome_price, modulome_name, modulome_image) VALUES 
-            ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "chambre"), 10, 15000, "modulome B10", "test");
+            ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "chambre"), 10, 10, "modulome B10", "bedroom10squarefeet"),
+            ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "chambre"), 15, 15, "modulome B15", "bedroom15squarefeet"),
+            ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "chambre"), 20, 20, "modulome B20", "bedroom20squarefeet"),
+            ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "salle de bains"), 8, 15000, "modulome Bath-A", "bathroomwithtoilet"),
+            ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "salle d\'eau"), 8, 15000, "modulome Bath-S", "bathseparatedtoilets"),
+            ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "pièce à vivre"), 30, 30, "modulome Living30", "livingroom30sqft"),
+            ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "pièce à vivre"), 40, 40, "modulome Living+K-30", "30sqftliving10kitchen"),
+            ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "pièce à vivre"), 50, 50, "modulome Living+K-40", "40sqftliving10kitchen")
+            ;
         ');
         return $sql;
     }
@@ -79,7 +86,6 @@ class js_modulome extends Module
         Configuration::deleteByName('DISPLAY');
         //supprime les bases de données associées au module
         Db::getInstance()->execute('
-        ALTER TABLE '._DB_PREFIX_.'modulome DROP FOREIGN KEY FK_cat;
             DROP TABLE IF EXISTS '._DB_PREFIX_.'modulome_category;
             DROP TABLE IF EXISTS '._DB_PREFIX_.'modulome;
         ');
