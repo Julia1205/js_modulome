@@ -1,5 +1,8 @@
 <?php
 
+require_once(_PS_ROOT_DIR_.'/modules/js_modulome/classes/maison.php');
+
+
 class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
 {
     public function initContent()
@@ -10,6 +13,8 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
 
     public function postProcess()
     {
+        $maison = new Maison();
+        //Tools::dieObject($maison);
         $nbBedrooms = Tools::getValue('nbBedrooms');
         $bedroomSize = array();
         $bathrooms = array();
@@ -17,6 +22,7 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
             $this->context->smarty->assign([
                 'step' => 1,
                 'nbbedrooms' => Tools::getValue('nbBedrooms'),
+                'sizes' => $maison->getSizes(),
             ]);
         }
         if(Tools::isSubmit('submitpart2')){
@@ -149,8 +155,5 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
                 ]);
             }
         }
-
-       
     }
-
 }

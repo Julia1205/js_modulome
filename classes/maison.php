@@ -42,9 +42,10 @@ class Maison extends ObjectModel
         ]
     ];
 
-    static function getBedroomSizes()
+    static function getSizes($catId)
     {
         $sql = new DbQuery();
-        $sql->select('modulome_size')->from('modulome', fm);//->where('modulome_cat_id')
+        $sql->select('modulome_size')->from('modulome', fm)->where('modulome_cat_id = '.$catId);
+        return $sql;
     }
 }
