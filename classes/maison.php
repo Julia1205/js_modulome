@@ -45,7 +45,16 @@ class Maison extends ObjectModel
     static function getSizes($catId)
     {
         $sql = new DbQuery();
-        $sql->select('modulome_size')->from('modulome', fm)->where('modulome_cat_id = '.$catId);
-        return $sql;
+        $sql->select('modulome_size')->from('modulome', 'fm')->where('modulome_cat_id = '.$catId);
+        $result = Db::getInstance()->executeS($sql);
+        return $result;
+    }
+
+    static function getPrice($size, $cat_id)
+    {
+        $sql1 = new DbQuery();
+        $sql1->select('modulome_price')->from('modulome', 'fm')->where('modulome_cat_id = '.$cat_id.' AND modulome_size = '.$size);
+        $result = Db::getInstance()->executeS($sql1);
+        return $result;
     }
 }

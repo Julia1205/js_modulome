@@ -16,16 +16,16 @@
 					{for $foo=1 to $nbbedrooms}
 						<label for="bedroomSize-{$foo}"> Surface chambre {$foo} : </label>
 							<select name="bedroomSize-{$foo}" id="bedroomSizes">
-								<option value="10">10 m <sup>2</sup> </option>
-								<option value="12">12 m <sup>2</sup> </option>
-								<option value="15">15 m <sup>2</sup> </option>
-								<option value="18">18 m <sup>2</sup> </option>
+								{foreach from=$sizes item=size key=key}
+									<option value="{$size['modulome_size'] }">{$size['modulome_size']} m <sup>2</sup> </option>
+								{/foreach}
 							</select>
 							<br>
 					{/for}
 					<input type="submit" name="submitpart2" value="Suivant">
 
 				{elseif $step eq 2}
+			
 					nbBedrooms : <input type="text" value="{$nbbedrooms}" name="nbBedrooms" class="nbbedrooms"><br>
 					{foreach from=$bedroomsSizes key=k item=bedroomSize}<br>
 						bedroom{$k}Size : <input type="text" name="bedroomSize-{$k}" value="{$bedroomSize}"> <br>
@@ -57,30 +57,26 @@
 						Concept à aire ouverte
 						<label for="livingroomSize"> Surface totale de la pièce : </label>
 						<select name="livingroomSize" id="livingroomSize">
-							<option value="10">10 m <sup>2</sup> </option>
-							<option value="12">12 m <sup>2</sup> </option>
-							<option value="15">15 m <sup>2</sup> </option>
-							<option value="18">18 m <sup>2</sup> </option>
+								{foreach from=$sizes item=size key=key}
+									<option value="{$size['modulome_size'] }">{$size['modulome_size']} m <sup>2</sup> </option>
+								{/foreach}
 						</select>
 
 					{else}
 						<br>
-						
 						<h2>Quelle surface de cuisine souhaitez-vous ?</h2>
 						<label for="kitchenSize"> Surface de la cuisine : </label>
 						<select name="kitchenSize" id="kitchenSize">
-							<option value="10">10 m <sup>2</sup> </option>
-							<option value="12">12 m <sup>2</sup> </option>
-							<option value="15">15 m <sup>2</sup> </option>
-							<option value="18">18 m <sup>2</sup> </option>
+								{foreach from=$kitchenSizes item=kitchenSize key=key}
+									<option value="{$kitchenSize['modulome_size'] }">{$kitchenSize['modulome_size']} m <sup>2</sup> </option>
+								{/foreach}
 						</select>
 						<h2>Quelle surface de séjour souhaitez-vous ?</h2>
 						<label for="livingroomSize"> Surface du séjour : </label>
 						<select name="livingroomSize" id="livingroomSize">
-							<option value="10">10 m <sup>2</sup> </option>
-							<option value="12">12 m <sup>2</sup> </option>
-							<option value="15">15 m <sup>2</sup> </option>
-							<option value="18">18 m <sup>2</sup> </option>
+								{foreach from=$livingSizes item=livingSize key=key}
+									<option value="{$livingSize['modulome_size'] }">{$livingSize['modulome_size']} m <sup>2</sup> </option>
+								{/foreach}
 						</select>
 					{/if}
 						<input type="submit" name="submitpart4" value="Suivant">

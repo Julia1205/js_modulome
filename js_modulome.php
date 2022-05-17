@@ -48,7 +48,7 @@ class js_modulome extends Module
             modulome_image TEXT NOT NULL,
             PRIMARY KEY(id_modulome)
             )ENGINE = '._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;
-            INSERT INTO '._DB_PREFIX_.'modulome_category (cat_name) VALUES ("salle de bains"), ("pièce à vivre"), ("salle d\'eau"), ("chambre");
+            INSERT INTO '._DB_PREFIX_.'modulome_category (cat_name) VALUES ("salle de bains"), ("pièce à vivre"), ("salle d\'eau"), ("chambre"), ("salon"), ("cuisine");
             INSERT INTO '._DB_PREFIX_.'modulome (modulome_cat_id, modulome_size, modulome_price, modulome_name, modulome_image) VALUES 
             ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "chambre"), 10, 10, "modulome B10", "bedroom10squarefeet"),
             ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "chambre"), 15, 15, "modulome B15", "bedroom15squarefeet"),
@@ -56,8 +56,11 @@ class js_modulome extends Module
             ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "salle de bains"), 8, 15000, "modulome Bath-A", "bathroomwithtoilet"),
             ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "salle d\'eau"), 8, 15000, "modulome Bath-S", "bathseparatedtoilets"),
             ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "pièce à vivre"), 30, 30, "modulome Living30", "livingroom30sqft"),
-            ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "pièce à vivre"), 40, 40, "modulome Living+K-30", "30sqftliving10kitchen"),
-            ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "pièce à vivre"), 50, 50, "modulome Living+K-40", "40sqftliving10kitchen")
+            ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "salon"), 30, 30, "modulome Living30", "30sqftliving"),
+            ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "salon"), 40, 40, "modulome Living40", "40sqftliving"),
+            ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "cuisine"), 10, 10, "modulome Kitchen-10", "10sqftkitchen"),
+            ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "cuisine"), 15, 15, "modulome Kitchen-15", "15sqftkitchen"),
+            ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "cuisine"), 20, 20, "modulome Kitchen-20", "20sqftkitchen")
             ;
         ');
         return $sql;
