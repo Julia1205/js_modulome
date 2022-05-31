@@ -16,8 +16,8 @@
 					{for $foo=1 to $nbbedrooms}
 						<label for="bedroomSize-{$foo}"> Surface chambre {$foo} : </label>
 							<select name="bedroomSize-{$foo}" id="bedroomSizes">
-								{foreach from=$sizes item=size key=key}
-									<option value="{$size['modulome_size'] }">{$size['modulome_size']} m <sup>2</sup> </option>
+								{foreach from=$sizes item=size}
+									<option value="{$size['modulome_size']}">{$size['modulome_size']} m <sup>2</sup> </option>
 								{/foreach}
 							</select>
 							<br>
@@ -30,6 +30,7 @@
 					{foreach from=$bedroomsSizes key=k item=bedroomSize}<br>
 						bedroom{$k}Size : <input type="text" name="bedroomSize-{$k}" value="{$bedroomSize}"> <br>
 					{/foreach}
+					<input type="text" name="price" value="{$price}">
 					<h2>Quel type de pièce à vivre souhaitez-vous ?</h2>
 					<div class="row">
 						<div class="col-6">
@@ -51,18 +52,20 @@
 						bedroomSize-{$k} : <input type="text" name="bedroomSize-{$k}" value="{$bedroomSize}"> <br>
 					{/foreach}
 					livingroomType : <input type="text" value="{$livingroomType}" name="livingroomType"><br>
+					price : <input type="text" name="price" value="{$price}">
 					{if $livingroomType eq "open"}
-					<h2>Quelle surface de pièce à vivre souhaitez-vous ?</h2>
-					<br>
-						Concept à aire ouverte
-						<label for="livingroomSize"> Surface totale de la pièce : </label>
-						<select name="livingroomSize" id="livingroomSize">
-								{foreach from=$sizes item=size key=key}
-									<option value="{$size['modulome_size'] }">{$size['modulome_size']} m <sup>2</sup> </option>
-								{/foreach}
-						</select>
 
-					{else}
+						<h2>Quelle surface de pièce à vivre souhaitez-vous ?</h2>
+						<br>
+							Concept à aire ouverte
+							<label for="livingroomSize"> Surface totale de la pièce : </label>
+							<select name="livingroomSize" id="livingroomSize">
+									{foreach from=$livingroomSizes item=size key=key}
+										<option value="{$size['modulome_size'] }">{$size['modulome_size']} m <sup>2</sup> </option>
+									{/foreach}
+							</select>
+
+					{elseif $livingroomType eq "separated"}
 						<br>
 						<h2>Quelle surface de cuisine souhaitez-vous ?</h2>
 						<label for="kitchenSize"> Surface de la cuisine : </label>
@@ -71,6 +74,7 @@
 									<option value="{$kitchenSize['modulome_size'] }">{$kitchenSize['modulome_size']} m <sup>2</sup> </option>
 								{/foreach}
 						</select>
+						
 						<h2>Quelle surface de séjour souhaitez-vous ?</h2>
 						<label for="livingroomSize"> Surface du séjour : </label>
 						<select name="livingroomSize" id="livingroomSize">
@@ -82,6 +86,7 @@
 						<input type="submit" name="submitpart4" value="Suivant">
 
 				{elseif $step eq 4}
+						price : <input type="text" name="price" value="{$price}">
 						nbBedrooms : <input type="text" value="{$nbbedrooms}" name="nbBedrooms" class="nbbedrooms"><br>
 						{foreach from=$bedroomsSizes key=k item=bedroomSize}
 							bedroomSize-{$k} : <input type="text" name="bedroomSize-{$k}" value="{$bedroomSize}"> <br>
@@ -105,6 +110,7 @@
 						<input type="submit" name="submitpart5" value="Suivant">
 
 					{elseif $step eq 5}
+						price : <input type="text" name="price" value="{$price}">
 						nbBedrooms : <input type="text" value="{$nbbedrooms}" name="nbBedrooms" class="nbbedrooms"><br>
 						{foreach from=$bedroomsSizes key=k item=bedroomSize}
 							bedroomSize-{$k} : <input type="text" name="bedroomSize-{$k}" value="{$bedroomSize}"> <br>
@@ -127,6 +133,7 @@
 						<input type="submit" name="submitpart6" value="Suivant">
 
 					{elseif $step eq 6}
+						price : <input type="text" name="price" value="{$price}">
 
 						nbBedrooms : <input type="text" value="{$nbbedrooms}" name="nbBedrooms" class="nbbedrooms"><br>
 						{foreach from=$bedroomsSizes key=k item=bedroomSize}
@@ -155,6 +162,7 @@
 						{/for}
 						<input type="submit" name="submitpart7" value="Suivant">
 					{elseif $step eq 7}
+						price : <input type="text" name="price" value="{$price}">
 						nbBedrooms : <input type="text" value="{$nbbedrooms}" name="nbBedrooms" class="nbbedrooms"><br>
 						{foreach from=$bedroomsSizes key=k item=bedroomSize}
 							bedroomSize-{$k} : <input type="text" name="bedroomSize-{$k}" value="{$bedroomSize}"> <br>
@@ -169,8 +177,9 @@
 						equiped : <input type="text" value="{$equiped}" name="equiped">
 						nbbathroom : <input type="text" value="{$nbbathroom}" name="nbbathroom">
 						{foreach from=$bathroomswithtoilet key=c item=bathroomwithtoilet}
-						salle de bain {$c}<input type="text" value="{$bathroomwithtoilet}" name="bathroomwithtoilet-{$c}">
+							salle de bain {$c}<input type="text" value="{$bathroomwithtoilet}" name="bathroomwithtoilet-{$c}">
 						{/foreach}
+						id client : <input type="text" name="cust_id" value="{$customer.id}">
 				{/if}
 			{else}
 			    <h2>Combien de chambres souhaitez-vous?</h2>

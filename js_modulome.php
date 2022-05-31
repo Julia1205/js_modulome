@@ -21,7 +21,7 @@ class js_modulome extends Module
         || !$this->installdb()
         || !$this->registerHook('displayHeader')
         || !$this->registerHook('actionFrontControllerSetMedia')
-        || !$this->installTab('AdminCatalog', 'AdminFormulaire', 'Gérer les modules')
+        || !$this->installTab()
         )
         {
             return false;
@@ -35,21 +35,27 @@ class js_modulome extends Module
         $sql = Db::getInstance()->execute
         ('
         CREATE TABLE IF NOT EXISTS '._DB_PREFIX_.'modulome_category (
-            id_modulome_category INT NOT NULL AUTO_INCREMENT,
+            id_modulome_category INT(11) NOT NULL AUTO_INCREMENT,
             cat_name TEXT NOT NULL,
             PRIMARY KEY(id_modulome_category)
+        )ENGINE = '._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;
+        CREATE TABLE IF NOT EXISTS '._DB_PREFIX_.'modulome_devis (
+            id_modulome_devis INT(11) NOT NULL AUTO_INCREMENT,
+            id_modulome INT(11) NOT NULL,
+            cust_id INT(11) NOT NULL,
+            PRIMARY KEY(id_modulome_devis)
             )ENGINE = '._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;
         CREATE TABLE IF NOT EXISTS '._DB_PREFIX_.'modulome (
-            id_modulome INT NOT NULL AUTO_INCREMENT,
-            modulome_cat_id INT NOT NULL,
-            modulome_size INT NOT NULL,
+            id_modulome INT(11) NOT NULL AUTO_INCREMENT,
+            modulome_cat_id INT(11) NOT NULL,
+            modulome_size INT(11) NOT NULL,
             modulome_price TEXT NOT NULL,
             modulome_name TEXT NOT NULL,
             modulome_image TEXT NOT NULL,
             PRIMARY KEY(id_modulome)
-            )ENGINE = '._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;
-            INSERT INTO '._DB_PREFIX_.'modulome_category (cat_name) VALUES ("salle de bains"), ("pièce à vivre"), ("salle d\'eau"), ("chambre"), ("salon"), ("cuisine");
-            INSERT INTO '._DB_PREFIX_.'modulome (modulome_cat_id, modulome_size, modulome_price, modulome_name, modulome_image) VALUES 
+        )ENGINE = '._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;
+        INSERT INTO '._DB_PREFIX_.'modulome_category (cat_name) VALUES ("salle de bains"), ("pièce à vivre"), ("salle d\'eau"), ("chambre"), ("salon"), ("cuisine"), ("cuisine équipée");
+        INSERT INTO '._DB_PREFIX_.'modulome (modulome_cat_id, modulome_size, modulome_price, modulome_name, modulome_image) VALUES 
             ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "chambre"), 10, 10, "modulome B10", "bedroom10squarefeet"),
             ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "chambre"), 15, 15, "modulome B15", "bedroom15squarefeet"),
             ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "chambre"), 20, 20, "modulome B20", "bedroom20squarefeet"),
@@ -60,28 +66,48 @@ class js_modulome extends Module
             ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "salon"), 40, 40, "modulome Living40", "40sqftliving"),
             ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "cuisine"), 10, 10, "modulome Kitchen-10", "10sqftkitchen"),
             ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "cuisine"), 15, 15, "modulome Kitchen-15", "15sqftkitchen"),
-            ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "cuisine"), 20, 20, "modulome Kitchen-20", "20sqftkitchen")
+            ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "cuisine"), 20, 20, "modulome Kitchen-20", "20sqftkitchen"),
+            ((SELECT id_modulome_category FROM '._DB_PREFIX_.'modulome_category WHERE cat_name = "cuisine équipée"), 20, 20, "modulome Kitchen-option", "20sqftkitchen"),
+
             ;
         ');
         return $sql;
     }
 
-    public function installTab($parent, $admincontroller, $name)
+    public function installTab()
     {
-        $tab = new Tab();
-        $tab->id_parent = (int)Tab::getIdFromClassName($parent);
-        $tab->name = [];
-            foreach(Language::getLanguages(true) as $lang)
-            {
-                $tab->name[$lang['id_lang']] = $name;
-            }
 
-        $tab->class_name = $admincontroller;
-        $tab->module = $this->name;
-        $tab->active = 1;
+        $parent_tab = new Tab();
+        $parent_tab->name = array();
+        foreach (Language::getLanguages() as $language) {
+            $parent_tab->name[$language['id_lang']] = $this->l('Gestion de modulome');
+        }
+        $parent_tab->class_name = 'AdminMainModulome'; // pas besoin de créer admincontroller
+        $parent_tab->id_parent = 0;
+        $parent_tab->module = $this->name;
+        $parent_tab->add();
 
-        return $tab->add();
-}
+        $tab1 = new Tab();
+        $tab1->name = array();
+        foreach (Language::getLanguages() as $language) {
+            $tab1->name[$language['id_lang']] = $this->l('Gérer les modules');
+        }
+        $tab1->class_name = 'AdminModulome';
+        $tab1->id_parent = $parent_tab->id;
+        $tab1->module = $this->name;
+
+        $tab2 = new Tab();
+        $tab2->name = array();
+        foreach (Language::getLanguages() as $language) {
+            $tab2->name[$language['id_lang']] = $this->l('Gérer les devis');
+        }
+        $tab2->class_name = 'devisModulome';
+        $tab2->id_parent = $parent_tab->id;
+        $tab2->module = $this->name;
+
+        return $tab1->add() && $tab2->add();
+
+    }
 
     public function uninstall()
     {
@@ -90,7 +116,8 @@ class js_modulome extends Module
         //supprime les bases de données associées au module
         Db::getInstance()->execute('
             DROP TABLE IF EXISTS '._DB_PREFIX_.'modulome_category;
-            DROP TABLE IF EXISTS '._DB_PREFIX_.'modulome;
+            DROP TABLE IF EXISTS '._DB_PREFIX_.'modulome; 
+            DROP TABLE IF EXISTS '._DB_PREFIX_.'modulome_devis;
         ');
         return parent::uninstall();
 
