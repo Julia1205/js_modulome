@@ -1,6 +1,8 @@
 <?php
 
 require_once(_PS_ROOT_DIR_.'/modules/js_modulome/classes/maison.php');
+require_once(_PS_ROOT_DIR_.'/modules/js_modulome/classes/devis.php');
+
 
 
 class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
@@ -131,6 +133,7 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
             $this->context->smarty->assign('price', $price);
         }
         if(Tools::isSubmit('submitpart6')){
+            $devis = new Devis();
             $this->context->smarty->assign([
                 'step' => 6,
                 'nbbedrooms' => $nbBedrooms,
@@ -143,7 +146,7 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
                 $price += (int)$maison->getPrice(0, Tools::getValue('equiped'), 0);
                 $this->context->smarty->assign('price', $price);
             }else{
-                $this->smarty->assign('price', $price);
+                $this->context->smarty->assign('price', $price);
             }
             for ($i=0; $i < $nbBedrooms; $i++) { 
                 $bedroomSize[] = Tools::getValue('bedroomSize-'.$i);
@@ -158,6 +161,7 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
             if(Tools::getValue('livingroomType') === "open"){
                 $this->context->smarty->assign('livingroomSize', Tools::getValue('livingroomSize'));
             }
+            Tools::getValue('id_client');
         }
         if(Tools::isSubmit('submitpart7')){
             $this->context->smarty->assign([
@@ -171,7 +175,12 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
             Tools::dieObject($price, false);
             for ($i=0; $i < $nbBedrooms; $i++) { 
                 $bedroomSize[] = Tools::getValue('bedroomSize-'.$i);
-                $this->context->smarty->assign('bedroomsSizes', $bedroomSize);
+                $bedroomImg[] = $maison->getBedroomImg(Tools::getValue('bedroomSize-'.$i));
+                Tools::DieObject($bedroomImg, false);
+                $this->context->smarty->assign([
+                    'bedroomsSizes' => $bedroomSize,
+                    'imgBed' => $bedroomImg
+                ]);
             }
             $this->context->smarty->assign('bedroomsPrice', $bedroomsPrice);
             if(Tools::getValue('livingroomType') === "separated"){
@@ -202,4 +211,23 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
             $this->context->smarty->assign('price', $price);
         }
     }
+
+    public function setMedia()
+    {
+        parent::setMedia();
+        Media::addJsDef([
+            'modulome_ajaxurl' => $this->context->link->getModuleLink('js_modulome', "modulome"),
+        ]);
+
+        $this->registerJavascript(
+            'modulome_js',
+            'modules/'.$this->module->name.'/views/assets/js/modulome.js',
+            [
+               'priority' => 200,
+               'postion' => 'bottom',
+            ]
+        );
+        $this->context->controller->addCSS(_MODULE_DIR_.$this->module->name.'/views/assets/css/modulome.css');
+    }
+
 }

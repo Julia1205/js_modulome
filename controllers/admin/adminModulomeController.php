@@ -1,6 +1,8 @@
 <?php
 
 require_once(_PS_ROOT_DIR_.'/modules/js_modulome/classes/maison.php');
+require_once(_PS_ROOT_DIR_.'/modules/js_modulome/classes/categorie.php');
+
 
 class AdminModulomeController extends ModuleAdminController
 {
@@ -14,13 +16,10 @@ class AdminModulomeController extends ModuleAdminController
 
         $this->fields_list = 
         [
-            'id_modulome' => 
-            [
-                'title' => 'ID'
-            ],
             'modulome_cat_id' =>
             [
-                'title' => 'Catégorie'
+                'title' => 'Catégorie',
+                'callback' => 'catname'
             ],
             'modulome_size' =>
             [
@@ -39,13 +38,18 @@ class AdminModulomeController extends ModuleAdminController
                 'title' => 'Image du module'
             ]
         ];
-        $this->addRowAction('delete');
         $this->addRowAction('edit');
+        $this->addRowAction('delete');
     }
 
     public function renderForm()
     {
-        //Tools::dieObject('hello');
+        $maison = new maison();
+        if(Tools::getValue('id_modulome')){
+            $imgName = $maison::getImageById(Tools::getValue('id_modulome'));
+            $lien = __PS_BASE_URI__."\modules\js_modulome/views/images/".$imgName;
+        }
+
         $query = new DbQuery();
         $query->select('id_modulome_category, cat_name')->from('modulome_category');
         $moduleCat = Db::getInstance()->executeS($query);
@@ -92,7 +96,8 @@ class AdminModulomeController extends ModuleAdminController
                     'type' => 'file',
                     'label' => 'Image du module',
                     'required' => true,
-                    'name' => 'modulome_image' 
+                    'name' => 'modulome_image',
+                    'image' => (isset($lien) && $lien ? '<img src="'.$lien.'" width="200px" height="auto" />': false)
                 ]
             ],
             'submit' => 
@@ -101,5 +106,42 @@ class AdminModulomeController extends ModuleAdminController
                 ]
         ];
         return parent::renderForm();
+    }
+
+    public function afterUpdate($object)
+    {
+        $image = $_FILES['modulome_image']['name'];
+        $chemin = move_uploaded_file($_FILES['modulome_image']['tmp_name'], _PS_CORE_DIR_."\modules\js_modulome/views/images/".$image);
+        return $chemin;
+    }
+
+    public function afterAdd($object)
+    {
+        $image = $_FILES['modulome_image']['name'];
+        $chemin = move_uploaded_file($_FILES['modulome_image']['tmp_name'], _PS_CORE_DIR_."\modules\js_modulome/views/images/".$image);
+        return $chemin;
+    }
+
+    public function processUpdate()
+    {
+        //Récupère le nom de l'image avant la MAJ de l'item.
+        $id_modulome = Tools::getValue('id_modulome');
+        $maison = new maison();
+        $image_name = maison::getImageById($id_modulome); //méthode qui permet de récupérer le nom de l'image actuelle
+        parent::processUpdate();
+        $maison = new maison($id_modulome); //hydrate un nouvel objet
+        if(empty (Tools::getValue('modulome_image'))){
+            $maison->modulome_image = $image_name;
+        }else{
+            $maison->modulome_image = Tools::getValue('modulome_image');
+        }
+        $maison->save();
+
+    }
+
+    static function catname($cat_id)
+    {
+        $categorie = new Categorie($cat_id);
+        return $categorie->cat_name;
     }
 }

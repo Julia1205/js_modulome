@@ -25,3 +25,26 @@ $('#bedroomSize').change(function(){
     console.log(texte);
 });
 
+
+function saveBDD(id_commentaire){
+    var newcomm = document.getElementById('newname-'+id_commentaire).value;
+    $.ajax({
+        type : 'POST',
+        url : modulome,
+        dataType : 'JSON',
+        data:{
+            ajax: true,
+            action : 'UpdateComm',
+            id_commentaire : id_commentaire,
+            newcomm : newcomm
+        },
+        success: function(data){
+            var oldcomm = document.getElementById('message-'+id_commentaire);
+            console.log(data);
+            oldcomm.innerText = data;
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown){
+            console.log(textStatus, errorThrown);
+        }
+    });
+}

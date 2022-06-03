@@ -4,77 +4,33 @@ class Devis extends ObjectModel
 {
     public static $definition = 
     [
-        'table' => 'modulome',
-        'primary' => 'id_modulome',
+        'table' => 'modulome_devis',
+        'primary' => 'id_modulome_devis',
         'multilang' => false,
         'fields' => 
         [
-            'id_modulome_devis' => 
+            'id_modulome' => 
             [
-                'type' => self::TYPE_HTML,
+                'type' => self::TYPE_INT,
                 'validate' => 'isInt',
                 'required' => true
             ],
-            'nbBedrooms' => 
+            'cust_id' => 
             [
-                'type' => self::TYPE_HTML,
+                'type' => self::TYPE_INT,
                 'validate' => 'isInt',
                 'required' => true
-            ],
-            'bedRoom1Size' =>
-            [
-                'type' => self::TYPE_HTML,
-                'validate' => 'isInt',
-                'required' => true
-            ],
-            'bedRoom2Size' =>
-            [
-                'type' => self::TYPE_HTML,
-                'validate' => 'isInt'
-            ],
-            'bedRoom3Size' =>
-            [
-                'type' => self::TYPE_HTML,
-                'validate' => 'isInt'
-            ],
-            'bedRoom4Size' =>
-            [
-                'type' => self::TYPE_HTML,
-                'validate' => 'isInt'
-            ],
-            'bedRoom5Size' =>
-            [
-                'type' => self::TYPE_HTML,
-                'validate' => 'isInt'
-            ],
-            'livingRoomSize' =>
-            [
-                'type' => self::TYPE_HTML,
-                'validate' => 'isInt',
-                'required' => true
-            ],
-            'kitchenSize' => 
-            [
-                'type' => self::TYPE_HTML,
-                'validate' => 'isInt',
-            ],
-            'nbBathrooms' => 
-            [
-                'type' => self::TYPE_HTML,
-                'validate' => 'isInt',
-                'required' => true
-            ],
-            'bathroomWithToilet' => 
-            [
-                'type' => self::TYPE_HTML,
-                'validate' => 'isInt'
-            ],
-            'bathroomwithouttoilet' => 
-            [
-                'type' => self::TYPE_HTML,
-                'validate' => 'isInt'
             ]
         ]
     ];
+
+    static function saveItem($cust_id, $id_modulome)
+    {
+        foreach($bedroomSizes as $bedroomSize){
+            Db::getInstance()->execute("
+                INSERT INTO "._DB_PREFIX_."modulome_devis (id_modulome, cust_id) VALUES (".$cust_id.", ".$id_modulome.");
+            ");
+        }
+    }
 
 }
