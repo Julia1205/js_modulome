@@ -15,7 +15,11 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
 
     public function postProcess()
     {
-        $this->context->smarty->assign('img_base', _MODULE_DIR_.'js_modulome/views/images/'.Configuration::get('IMAGE_FORMULAIRE'));
+        $lien = _MODULE_DIR_.'js_modulome/views/images/';
+        $this->context->smarty->assign([
+            'img_base' => _MODULE_DIR_.'js_modulome/views/images/'.Configuration::get('IMAGE_FORMULAIRE'),
+            'lien' => $lien
+        ]);
         $maison = new Maison();
         $nbBedrooms = Tools::getValue('nbBedrooms');
         $bedroomSize = array();
@@ -29,13 +33,16 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
             'bed-'$i => 
         }*/
         if(Tools::isSubmit('submitpart1')){
+            //Tools::dieObject($liens);
+            //Tools::dieObject($liens);
+            //$lien = _MODULE_DIR_.'/js_modulome/views/assets/images/'.$images;
             $this->context->smarty->assign([
                 'step' => 1,
                 'nbbedrooms' => Tools::getValue('nbBedrooms'),
                 'sizes' => $maison->getSizes('4'),
+                'images' => $lien,
             ]);
-            $sqlQuery = new DbQuery();
-            $sqlQuery->select('modulome_image')->from('modulome')->where('modulome_cat_id = 4');
+            
         }
         if(Tools::isSubmit('submitpart2')){
             $this->context->smarty->assign([
@@ -209,6 +216,7 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
                 }
                 $price += $bathroomsPrice;
             }
+        }
             $post = $_POST;
             array_pop($post);
             //Tools::dieObject($post);
@@ -288,9 +296,12 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
                     }
                 }
             }
+            
             $this->context->smarty->assign('price', $price);
+
+        
     }
-}
+
     
 
     public function setMedia()

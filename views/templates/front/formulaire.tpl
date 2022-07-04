@@ -5,17 +5,20 @@
 
     {block name="page_content"}
 	
-	    <img src="{$img_base}" />
+	    <img src="{$img_base}" id="imgForm" width="1000" height="600"/>
 		<form action ="" method="post">
 
 			{if isset($step)}
 				<div class="hideIt">
 					<input type="hidden" value="{$step}" class="step">
+					<input type="hidden" value="{$lien}" id="lienImg"><br>
 				</div>
 				{if $step eq 1}
-
 					<div class="hideIt">
-						<input type="text" value="{$nbbedrooms}"  class="nbbedrooms" name="nbBedrooms"><br>
+						<input type="text" value="{$nbbedrooms}"  class="nbbedrooms" name="nbBedrooms"></input><br>
+						{foreach from=$images item=image}
+							<input type="hidden" value="{$image}" id="lienImgBed"><br>
+						{/foreach}
 					</div>
 					<h2>Quelle surface de chambre souhaitez-vous?</h2>
 					{for $foo=1 to $nbbedrooms}
@@ -36,16 +39,15 @@
 							bedroom{$k}Size : <input type="text" name="bedroomSize-{$k}" value="{$bedroomSize}"> <br>
 						{/foreach}
 						<input type="text" name="price" value="{$price}">
+
 					</div>
 					<h2>Quel type de pièce à vivre souhaitez-vous ?</h2>
 					<div class="row">
 						<div class="col-6">
-							<img src="">
 							<label for="livingroomType">Concept à aire ouverte</label>
 							<input type="radio" name="livingroomType" class="radio" value="open" id="livingroomType">
 						</div>
 						<div class="col-6">
-							<img src="">
 							<label for="livingroomType">Cuisine séparée</label>
 							<input type="radio" name="livingroomType" class="radio" value="separated" id="livingroomType">
 						</div>

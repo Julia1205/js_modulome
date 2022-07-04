@@ -69,6 +69,13 @@ class Maison extends ObjectModel
         return $result;
     }
 
+    static function getImage($size, $catId)
+    {
+        $sqlQuery = new DbQuery();
+        $sqlQuery->select('modulome_image')->from('modulome', 'fm')->where('modulome_cat_id = '.$catId.' AND modulome_size = '.$size);
+        return Db::getInstance()->getRow($sqlQuery);
+    }
+
     static function getBathroomsPrice($cat_id){
         $sql2 = new DbQuery();
         $sql2->select('modulome_price')->from('modulome', 'fm')->where('modulome_cat_id = '.$cat_id);

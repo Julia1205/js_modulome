@@ -1,11 +1,3 @@
-function targett() {
-    alert('hello!');
-}
-
-$("#nbBedrooms[val='1']").click(function(){
-    alert('hello');
-});
-
 $('.radio').click(function(){
     var radios = document.getElementsByName('nbBedrooms');
     var valeur;
@@ -19,32 +11,32 @@ $('.radio').click(function(){
 
 
 
-$('#bedroomSize').change(function(){
+$('#bedroomSizes').change(function(){
     liste = document.getElementById("bedroomSizes");
     texte = liste.options[liste.selectedIndex].value;
-    console.log(texte);
+    lien = document.getElementById("lienImgBed").value;
+    console.log(lien+"bedroom"+texte+'squarefeet.jpg');
+    $('#imgForm').attr('src', lien+"bedroom"+texte+'squarefeet.png');
 });
 
-
-function saveBDD(id_commentaire){
-    var newcomm = document.getElementById('newname-'+id_commentaire).value;
-    $.ajax({
-        type : 'POST',
-        url : modulome,
-        dataType : 'JSON',
-        data:{
-            ajax: true,
-            action : 'UpdateComm',
-            id_commentaire : id_commentaire,
-            newcomm : newcomm
-        },
-        success: function(data){
-            var oldcomm = document.getElementById('message-'+id_commentaire);
-            console.log(data);
-            oldcomm.innerText = data;
-        },
-        error: function(XMLHttpRequest, textStatus, errorThrown){
-            console.log(textStatus, errorThrown);
+$('.radio').click(function(){
+    var radios = document.getElementsByName('livingroomType');
+    var valeur;
+    for(var i = 0; i < radios.length; i++){
+        if(radios[i].checked){
+            valeur = radios[i].value;
+            console.log(valeur);
         }
-    });
-}
+    }
+});
+
+$('#livingroomType').click(function(){
+    lien = document.getElementById("lienImg").value;
+    type = document.getElementById("livingroomType").value;
+    if(type === 'open'){
+
+        $('#imgForm').attr('src', lien+"livingroom30sqft.png");
+    }else{
+        $('#imgForm').attr('src', lien+"30sqftliving10kitchen.png");
+    }
+});

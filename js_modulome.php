@@ -42,7 +42,7 @@ class js_modulome extends Module
             id_modulome_devis INT(11) NOT NULL AUTO_INCREMENT,
             id_modulome INT(11) NOT NULL,
             cust_id INT(11) NOT NULL,
-            equiped_kitchen TINYINT
+            equiped_kitchen TINYINT,
             PRIMARY KEY(id_modulome_devis)
             )ENGINE = '._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;
         CREATE TABLE IF NOT EXISTS '._DB_PREFIX_.'modulome (
@@ -69,8 +69,7 @@ class js_modulome extends Module
             (6, 20, 20, "modulome Kitchen-20", "20sqftkitchen"),
             (7, 20, 20, "modulome Kitchen-option", "20sqftkitchen"),
             (8, 10, 20, "modulome bathroom-option", "separatedToilets")
-            (
-            ;
+            
         ');
         return $sql;
     }
@@ -153,9 +152,9 @@ class js_modulome extends Module
             {
                 if(!move_uploaded_file($_FILES['IMAGE_FORMULAIRE']['tmp_name'], dirname(__FILE__).'/views/images/'.$image))
                 {
+                    Configuration::updateValue('IMAGE_FORMULAIRE', $image);
                     $output .= $this->displayError('L\'image n\'a pas pû être enregistrée.');
                 }else{
-                    Configuration::updateValue('IMAGE_FORMULAIRE', $image);
                     $output .= $this->displayConfirmation('C\'est bien enregistré tqt');
                 }
             }
