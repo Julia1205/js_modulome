@@ -23,14 +23,4 @@ class Devis extends ObjectModel
             ]
         ]
     ];
-
-    static function saveItem($cust_id, $id_modulome)
-    {
-        foreach($bedroomSizes as $bedroomSize){
-            Db::getInstance()->execute("
-                INSERT INTO "._DB_PREFIX_."modulome_devis (id_modulome, cust_id) VALUES (".$cust_id.", ".$id_modulome.");
-            ");
-        }
-    }
-
 }

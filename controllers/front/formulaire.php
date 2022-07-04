@@ -15,6 +15,7 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
 
     public function postProcess()
     {
+        $this->context->smarty->assign('img_base', _MODULE_DIR_.'js_modulome/views/images/'.Configuration::get('IMAGE_FORMULAIRE'));
         $maison = new Maison();
         $nbBedrooms = Tools::getValue('nbBedrooms');
         $bedroomSize = array();
@@ -23,12 +24,18 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
         $bathroomsPrice = 0;
         $price = 0;
         $totalBedrooms = 0;
+        /*5
+        for ($i=0; $i < 5; $i++) { 
+            'bed-'$i => 
+        }*/
         if(Tools::isSubmit('submitpart1')){
             $this->context->smarty->assign([
                 'step' => 1,
                 'nbbedrooms' => Tools::getValue('nbBedrooms'),
                 'sizes' => $maison->getSizes('4'),
             ]);
+            $sqlQuery = new DbQuery();
+            $sqlQuery->select('modulome_image')->from('modulome')->where('modulome_cat_id = 4');
         }
         if(Tools::isSubmit('submitpart2')){
             $this->context->smarty->assign([
@@ -161,7 +168,6 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
             if(Tools::getValue('livingroomType') === "open"){
                 $this->context->smarty->assign('livingroomSize', Tools::getValue('livingroomSize'));
             }
-            Tools::getValue('id_client');
         }
         if(Tools::isSubmit('submitpart7')){
             $this->context->smarty->assign([
@@ -172,11 +178,9 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
                 'nbbathroom' => Tools::getValue('nbbathroom')
             ]);
             $price = (int)Tools::getValue('price');
-            Tools::dieObject($price, false);
             for ($i=0; $i < $nbBedrooms; $i++) { 
                 $bedroomSize[] = Tools::getValue('bedroomSize-'.$i);
                 $bedroomImg[] = $maison->getBedroomImg(Tools::getValue('bedroomSize-'.$i));
-                Tools::DieObject($bedroomImg, false);
                 $this->context->smarty->assign([
                     'bedroomsSizes' => $bedroomSize,
                     'imgBed' => $bedroomImg
@@ -204,13 +208,90 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
                     $bathroomsPrice += (int)$maison->getBathroomsPrice(0, 3,0);
                 }
                 $price += $bathroomsPrice;
-                Tools::dieObject($price, false);
             }
-                    //$price += (int)$bathroomprice;
-            
+            $post = $_POST;
+            array_pop($post);
+            //Tools::dieObject($post);
+            foreach ($post as $keykey => $valhue) {
+                if(strstr($keykey, 'bedroomSize'))
+                {
+                    $nbBed = $post['nbBedrooms'];
+                    for ($i=0; $i < $nbBed; $i++) 
+                    { 
+                        if($keykey == "bedroomSize-".$i){
+                            $devisQuery = new DbQuery();
+                            $devisQuery->select('id_modulome')->from('modulome')->where('modulome_cat_id = 4 AND modulome_size = '.$valhue);
+                            $test = Db::getInstance()->executeS($devisQuery);
+                            Db::getInstance()->insert('modulome_devis', 
+                            [
+                                'id_modulome' => $test[0]['id_modulome'],
+                                'cust_id' => $this->context->customer->id,
+                            ]);
+                        }
+                    }
+                }elseif(strstr($keykey, 'equiped')){
+                    Db::getInstance()->insert('modulome_devis', 
+                    [
+                        'cust_id' => $this->context->customer->id,
+                        'equiped_kitchen' => $valhue,
+                        'id_modulome' => 12
+                    ]);
+
+                }elseif(strstr($keykey, 'livingroomType')){
+                    if($valhue == "separated")
+                    {
+                        $devisQuery = new DbQuery();
+                        $devisQuery->select('id_modulome')->from('modulome')->where('modulome_cat_id = 5 AND modulome_size = '.$post['livingroomSize']);
+                        $lSize = Db::getInstance()->executeS($devisQuery);
+                        $devisQuery2 = new DbQuery();
+                        $devisQuery2->select('id_modulome')->from('modulome')->where('modulome_cat_id = 6 AND modulome_size = '.$post['kitchenSize']);
+                        $kSize = Db::getInstance()->executeS($devisQuery2);
+                        Db::getInstance()->insert('modulome_devis', 
+                        [
+                            'id_modulome' => $lSize[0]['id_modulome'],
+                            'cust_id' => $this->context->customer->id
+                        ]);
+                        Db::getInstance()->insert('modulome_devis', 
+                        [
+                            'id_modulome' => $kSize[0]['id_modulome'],
+                            'cust_id' => $this->context->customer->id
+                        ]);
+                    }else{
+                        $devisQuery = new DbQuery();
+                        $devisQuery->select('id_modulome')->from('modulome')->where('modulome_cat_id = 5 AND modulome_size = '.$post['livingroomSize']);
+                        $lSize = Db::getInstance()->executeS($devisQuery);
+                        Db::getInstance()->insert('modulome_devis', 
+                        [
+                            'id_modulome' => $lSize[0]['id_modulome'],
+                            'cust_id' => $this->context->customer->id
+                        ]);
+                    }
+                }elseif(strstr($keykey, 'nbbathroom')){
+                    if($valhue == 1){
+                        $devisQuery = new DbQuery();
+                        $devisQuery->select('id_modulome')->from('modulome')->where('modulome_cat_id = 1');
+                        $bathOption = Db::getInstance()->executeS($devisQuery);
+                        Db::getInstance()->insert('modulome_devis', 
+                        [
+                            'id_modulome' => $bathOption[0]['id_modulome'],
+                            'cust_id' => $this->context->customer->id
+                        ]);
+                    }else{
+                        $devisQuery = new DbQuery();
+                        $devisQuery->select('id_modulome')->from('modulome')->where('modulome_cat_id = 3');
+                        $bath = Db::getInstance()->executeS($devisQuery);
+                        Db::getInstance()->insert('modulome_devis', 
+                        [
+                            'id_modulome' => $bath[0]['id_modulome'],
+                            'cust_id' => $this->context->customer->id
+                        ]);
+                    }
+                }
+            }
             $this->context->smarty->assign('price', $price);
-        }
     }
+}
+    
 
     public function setMedia()
     {

@@ -4,7 +4,8 @@
     {/block}
 
     {block name="page_content"}
-	    <img src="https://cdn.futura-sciences.com/buildsv6/images/mediumoriginal/6/5/2/652a7adb1b_98148_01-intro-773.jpg" />
+	
+	    <img src="{$img_base}" />
 		<form action ="" method="post">
 
 			{if isset($step)}
@@ -12,6 +13,7 @@
 					<input type="hidden" value="{$step}" class="step">
 				</div>
 				{if $step eq 1}
+
 					<div class="hideIt">
 						<input type="text" value="{$nbbedrooms}"  class="nbbedrooms" name="nbBedrooms"><br>
 					</div>

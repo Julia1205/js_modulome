@@ -88,4 +88,12 @@ class Maison extends ObjectModel
         $image = new maison($id);
         return $image->modulome_image;
     }
+
+    static function getId($catId, $size){
+        $query = new DbQuery();
+        $query->select('id_modulome')->from('modulome', 'fm')->where('modulome_cat_id = '.$catId.' AND modulome_size = '.$size);
+        $result = Db::getInstance()->executeS($size);
+        Tools::dieObject($result);
+        return $result;
+    }
 }

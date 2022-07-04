@@ -42,6 +42,7 @@ class js_modulome extends Module
             id_modulome_devis INT(11) NOT NULL AUTO_INCREMENT,
             id_modulome INT(11) NOT NULL,
             cust_id INT(11) NOT NULL,
+            equiped_kitchen TINYINT
             PRIMARY KEY(id_modulome_devis)
             )ENGINE = '._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;
         CREATE TABLE IF NOT EXISTS '._DB_PREFIX_.'modulome (
@@ -53,7 +54,7 @@ class js_modulome extends Module
             modulome_image TEXT NOT NULL,
             PRIMARY KEY(id_modulome)
         )ENGINE = '._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;
-        INSERT INTO '._DB_PREFIX_.'modulome_category (cat_name) VALUES ("salle de bains"), ("pièce à vivre"), ("salle d\'eau"), ("chambre"), ("salon"), ("cuisine"), ("kitchenOption");
+        INSERT INTO '._DB_PREFIX_.'modulome_category (cat_name) VALUES ("salle de bains"), ("pièce à vivre"), ("salle d\'eau"), ("chambre"), ("salon"), ("cuisine"), ("kitchenOption"), ("bathroomOption");
         INSERT INTO '._DB_PREFIX_.'modulome (modulome_cat_id, modulome_size, modulome_price, modulome_name, modulome_image) VALUES 
             (4, 10, 10, "modulome B10", "bedroom10squarefeet"),
             (4, 15, 15, "modulome B15", "bedroom15squarefeet"),
@@ -66,7 +67,9 @@ class js_modulome extends Module
             (6, 10, 10, "modulome Kitchen-10", "10sqftkitchen"),
             (6, 15, 15, "modulome Kitchen-15", "15sqftkitchen"),
             (6, 20, 20, "modulome Kitchen-20", "20sqftkitchen"),
-            (7, 20, 20, "modulome Kitchen-option", "20sqftkitchen")
+            (7, 20, 20, "modulome Kitchen-option", "20sqftkitchen"),
+            (8, 10, 20, "modulome bathroom-option", "separatedToilets")
+            (
             ;
         ');
         return $sql;
