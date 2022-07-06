@@ -19,7 +19,7 @@ $('#bedroomSizes').change(function(){
     $('#imgForm').attr('src', lien+"bedroom"+texte+'squarefeet.png');
 });
 
-$('.radio').click(function(){
+/*$('.radio').click(function(){
     var radios = document.getElementsByName('livingroomType');
     var valeur;
     for(var i = 0; i < radios.length; i++){
@@ -28,15 +28,15 @@ $('.radio').click(function(){
             console.log(valeur);
         }
     }
-});
+});*/
 
 $('#livingroomType').click(function(){
-    lien = document.getElementById("lienImg").value;
+    lien = document.getElementById("lienImgBed").value;
     type = document.getElementById("livingroomType").value;
-    if(type === 'open'){
-
+    if(type == 'open'){
+        console.log(lien);
         $('#imgForm').attr('src', lien+"livingroom30sqft.png");
-    }else{
+    } else {
         $('#imgForm').attr('src', lien+"30sqftliving10kitchen.png");
     }
 });

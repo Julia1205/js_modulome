@@ -47,7 +47,8 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
         if(Tools::isSubmit('submitpart2')){
             $this->context->smarty->assign([
                 'step' => 2,
-                'nbbedrooms' => $nbBedrooms
+                'nbbedrooms' => $nbBedrooms,
+                'images' => $lien
             ]);
             
             for ($i=1; $i <= $nbBedrooms; $i++) { 
@@ -219,7 +220,15 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
         }
             $post = $_POST;
             array_pop($post);
-            //Tools::dieObject($post);
+            $checkCustIdQuery = new DbQuery();
+            $checkCustIdQuery->select('*')->from('modulome_devis')->where('cust_id = '.$this->context->customer->id);
+            $checkCustId = Db::getInstance()->numRows($checkCustIdQuery);
+
+            if($checkCustId > 0)
+            {
+                Db::getInstance()->delete('modulome_devis', 'cust_id = '.$this->context->customer->id);
+            }
+
             foreach ($post as $keykey => $valhue) {
                 if(strstr($keykey, 'bedroomSize'))
                 {

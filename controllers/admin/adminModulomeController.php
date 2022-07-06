@@ -15,7 +15,7 @@ class AdminModulomeController extends ModuleAdminController
         parent::__construct();
 
         $this->fields_list = 
-        [
+        [   
             'modulome_cat_id' =>
             [
                 'title' => 'Catégorie',

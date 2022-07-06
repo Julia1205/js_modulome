@@ -39,6 +39,7 @@
 							bedroom{$k}Size : <input type="text" name="bedroomSize-{$k}" value="{$bedroomSize}"> <br>
 						{/foreach}
 						<input type="text" name="price" value="{$price}">
+						<input type="hidden" value="{$images}" id="lienImgBed"><br>
 
 					</div>
 					<h2>Quel type de pièce à vivre souhaitez-vous ?</h2>
