@@ -76,7 +76,7 @@ class js_modulome extends Module
 
     public function installTab()
     {
-
+        //fonction d'installation des onglets
         $parent_tab = new Tab();
         $parent_tab->name = array();
         foreach (Language::getLanguages() as $language) {
@@ -120,6 +120,7 @@ class js_modulome extends Module
             DROP TABLE IF EXISTS '._DB_PREFIX_.'modulome; 
             DROP TABLE IF EXISTS '._DB_PREFIX_.'modulome_devis;
         ');
+        //supression des onglets
         $tabMain = new Tab((int)Tab::getIdFromClassName('AdminMainPersonnalisation'));
         $tabMain->delete();
         $tabMain = new Tab((int)Tab::getIdFromClassName('AdminModulome'));
@@ -135,27 +136,25 @@ class js_modulome extends Module
         $output = "";
         if(Tools::isSubmit('submit_jsmodulome'))
         {
+            //Champ d'affichage ou non du formulaire
             $display = Tools::getValue('DISPLAY');
 
-            if((empty($display) || $display) && Validate::isBool($display))
-            {
+            if((empty($display) || $display) && Validate::isBool($display)){
                 Configuration::updateValue('DISPLAY', $display);
                 $output .= $this->displayConfirmation('La donnée du champ "DISPLAY" à bien été enregistrée');
-            }
-            else
-            {
+            }else{
                 $output .= $this->displayError('Une erreur est survenue, merci de ré-essayer.');
             }
-
+            //
             $image = Tools::getValue('IMAGE_FORMULAIRE');
             if($image || !empty($image) && Validate::isImageTypeName($image))
             {
                 if(!move_uploaded_file($_FILES['IMAGE_FORMULAIRE']['tmp_name'], dirname(__FILE__).'/views/images/'.$image))
                 {
                     Configuration::updateValue('IMAGE_FORMULAIRE', $image);
-                    $output .= $this->displayError('L\'image n\'a pas pû être enregistrée.');
-                }else{
                     $output .= $this->displayConfirmation('C\'est bien enregistré tqt');
+                }else{
+                    $output .= $this->displayError('L\'image n\'a pas pû être enregistrée.');
                 }
             }
 
@@ -172,9 +171,7 @@ class js_modulome extends Module
 
         $form_configuration['0']['form'] = 
         [
-            'legend' =>[
-                'title' => $this->l('Setting'), //la fonction l($string permet de gérer les traductions)
-            ],
+            'legend' =>['title' => $this->l('Setting')],//la fonction l($string permet de gérer les traductions)
             'input' => [
                 [
                     'type' => 'radio',
@@ -204,10 +201,7 @@ class js_modulome extends Module
                     'image' => (isset($lien) && $lien ? '<img src="'.$lien.'" width="200px" height="auto" />': false),
                 ]
             ],
-            'submit' => [
-                'title' => $this->l('Enregistrer'),
-                'class' => 'btn btn default pull-right',
-            ],
+            'submit' => ['title' => $this->l('Enregistrer'),'class' => 'btn btn default pull-right'],
         ];
 
         //création du formulaire
@@ -231,20 +225,12 @@ class js_modulome extends Module
 
     public function hookdisplayHeader()
     {
-
-        $params = [
-            'nom1' => "1",
-            'nom2' => "2"
-        ];
-        $lien = $this->context->link->getModuleLink('js_modulome', 'formulaire', $params);
+        //affichage du lien dirigeant vers le formulaire
+        $lien = $this->context->link->getModuleLink('js_modulome', 'formulaire');
+        //verification si la configuration autorise
         if(Configuration::get('DISPLAY')){
-            $this->context->smarty->assign(
-                [
-                    'lien' => $lien,
-                ]
-            );
+            $this->context->smarty->assign('lien', $lien);
         }
         return $this->display(__FILE__, 'banner.tpl');
     }
-
 }

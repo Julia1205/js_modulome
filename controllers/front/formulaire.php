@@ -20,6 +20,7 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
             'img_base' => _MODULE_DIR_.'js_modulome/views/images/'.Configuration::get('IMAGE_FORMULAIRE'),
             'lien' => $lien
         ]);
+
         $maison = new Maison();
         $nbBedrooms = Tools::getValue('nbBedrooms');
         $bedroomSize = array();
@@ -28,14 +29,9 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
         $bathroomsPrice = 0;
         $price = 0;
         $totalBedrooms = 0;
-        /*5
-        for ($i=0; $i < 5; $i++) { 
-            'bed-'$i => 
-        }*/
+
+//Choix du nombre de chambres
         if(Tools::isSubmit('submitpart1')){
-            //Tools::dieObject($liens);
-            //Tools::dieObject($liens);
-            //$lien = _MODULE_DIR_.'/js_modulome/views/assets/images/'.$images;
             $this->context->smarty->assign([
                 'step' => 1,
                 'nbbedrooms' => Tools::getValue('nbBedrooms'),
@@ -44,29 +40,35 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
             ]);
             
         }
+        //choix de la taille des chambres
         if(Tools::isSubmit('submitpart2')){
             $this->context->smarty->assign([
                 'step' => 2,
                 'nbbedrooms' => $nbBedrooms,
                 'images' => $lien
             ]);
-            
+            /*Recuperation de la taille des chambres*/
             for ($i=1; $i <= $nbBedrooms; $i++) { 
                 $bedroomSize[] = Tools::getValue('bedroomSize-'.$i);
                 $this->context->smarty->assign('bedroomsSizes', $bedroomSize);
+                /*Récupération du prix*/
                 $bedroomsPrice[] =  $maison->getPrice(Tools::getValue('bedroomSize-'.$i), 4, 1);
             }
             foreach ($bedroomsPrice as $value){
+                /*calcul du prix*/
                 $price += (int)$value[0]['modulome_price'];
             }
             $this->context->smarty->assign('price', $price);
         }
+        //choix du type de pièce à vivre
         if(Tools::isSubmit('submitpart3')){
             $this->context->smarty->assign([
                 'step' => 3, 
                 'nbbedrooms' => $nbBedrooms,
+                /*récupération du prix précédent*/
                 'price' => Tools::getValue('price')
             ]);
+            /*recuperation du type de pièce à vivre*/
             if(Tools::getValue('livingroomType') === "separated"){
                 $this->context->smarty->assign([
                     'kitchenSizes' => $maison->getSizes('6'),
@@ -75,10 +77,12 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
                 ]); 
             }else{
                 $this->context->smarty->assign([
+                    /*récupération des tailles disponibles*/
                     'livingroomSizes' => $maison->getSizes('2'),
                     'livingroomType' => Tools::getValue('livingroomType'),
                 ]); 
             }
+            //récupération des tailles des chambres
             for ($i=0; $i < $nbBedrooms; $i++) { 
                 $bedroomSize[] = Tools::getValue('bedroomSize-'.$i);
                 $this->context->smarty->assign([
@@ -86,6 +90,7 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
                 ]); 
             }
         }
+        //choix de la taille des pièces à vivre
         if(Tools::isSubmit('submitpart4')){
             $this->context->smarty->assign([
                 'step' => 4,
@@ -98,6 +103,7 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
                 $this->context->smarty->assign('bedroomsSizes', $bedroomSize);
             }
             $price = (int)Tools::getValue('price');
+            //si la pièce à vivre est en deux pièces séparées
             if(Tools::getValue('livingroomType') === "separated"){
                 $this->context->smarty->assign([
                     'livingroomSize' => Tools::getValue('livingroomSize'),
@@ -109,6 +115,7 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
                 $price += (int)$kitchenPrice;
                 $this->context->smarty->assign('price', $price);
             }
+            //Si la pièce à vivre est à aire ouverte
             if(Tools::getValue('livingroomType') === "open"){
                 $this->context->smarty->assign('livingroomSize', Tools::getValue('livingroomSize'));
                 $livingPrice = (int)$maison->getPrice(Tools::getValue('livingroomSize'), 2, 1);
@@ -116,6 +123,7 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
                 $this->context->smarty->assign('price', $price);
             }
         }
+        //choix de la cuisine équipée ou non
         if(Tools::isSubmit('submitpart5')){
             $price = (int)Tools::getValue('price');
             $this->context->smarty->assign([
@@ -147,6 +155,7 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
             }
             $this->context->smarty->assign('price', $price);
         }
+        //choix du nombre de salles de bain
         if(Tools::isSubmit('submitpart6')){
             $devis = new Devis();
             $this->context->smarty->assign([
@@ -177,6 +186,7 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
                 $this->context->smarty->assign('livingroomSize', Tools::getValue('livingroomSize'));
             }
         }
+        //choix des wc séparés dans la salle de bain ou non
         if(Tools::isSubmit('submitpart7')){
             $this->context->smarty->assign([
                 'step' => 7,
@@ -218,8 +228,11 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
                 $price += $bathroomsPrice;
             }
         }
+            //Recuperation des données envoyées pour sauvegarde dans la base de données des devis
             $post = $_POST;
+            //suppression du nom du bouton
             array_pop($post);
+            //suppression des données en cas d'utilisateur ayant déjà fait un devis
             $checkCustIdQuery = new DbQuery();
             $checkCustIdQuery->select('*')->from('modulome_devis')->where('cust_id = '.$this->context->customer->id);
             $checkCustId = Db::getInstance()->numRows($checkCustIdQuery);
@@ -228,7 +241,7 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
             {
                 Db::getInstance()->delete('modulome_devis', 'cust_id = '.$this->context->customer->id);
             }
-
+            //parcours des données du POST pour sauvgarde
             foreach ($post as $keykey => $valhue) {
                 if(strstr($keykey, 'bedroomSize'))
                 {
@@ -307,8 +320,6 @@ class js_modulomeFormulaireModuleFrontController extends ModuleFrontController
             }
             
             $this->context->smarty->assign('price', $price);
-
-        
     }
 
     

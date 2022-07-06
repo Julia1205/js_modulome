@@ -32,6 +32,13 @@ class devisModulomeController extends ModuleAdminController
         $this->addRowAction('delete');
     }
 
+    /**
+     *
+     * @param int $id 
+     *                     
+     * @return varchar $modulome_name
+     */
+
     public function getModulomeName($id)
     {
         $nameQuery = new DbQuery;
@@ -49,11 +56,20 @@ class devisModulomeController extends ModuleAdminController
         }
     }
 
+    /**
+     *
+     * @param int $id 
+     *                     
+     * @return varchar $custName
+     * 
+     */
+
     public function getClient($id)
     {
         $customerQuery = new DbQuery();
         $customerQuery->select('firstname, lastname')->from('customer')->where('id = '.$id);
         $test = Db::getInstance()->getRow($test);
+        return $test;
         Tools::dieObject($test);
     }
 }

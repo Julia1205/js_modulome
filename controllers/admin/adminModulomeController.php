@@ -13,30 +13,14 @@ class AdminModulomeController extends ModuleAdminController
         $this->bootstrap = true;
 
         parent::__construct();
-
+//definition des champs du controller
         $this->fields_list = 
         [   
-            'modulome_cat_id' =>
-            [
-                'title' => 'Catégorie',
-                'callback' => 'catname'
-            ],
-            'modulome_size' =>
-            [
-                'title' => 'Surface du module'
-            ],
-            'modulome_price' =>
-            [
-                'title' => 'Prix du module'
-            ],
-            'modulome_name' =>
-            [
-                'title' => 'Nom du module'
-            ],
-            'modulome_image' =>
-            [
-                'title' => 'Image du module'
-            ]
+            'modulome_cat_id' =>['title' => 'Catégorie','callback' => 'catname'],
+            'modulome_size' => ['title' => 'Surface du module'],
+            'modulome_price' =>['title' => 'Prix du module'],
+            'modulome_name' =>['title' => 'Nom du module'],
+            'modulome_image' =>['title' => 'Image du module']
         ];
         $this->addRowAction('edit');
         $this->addRowAction('delete');
@@ -57,9 +41,7 @@ class AdminModulomeController extends ModuleAdminController
         $this->fields_form =
         [
             'legend' => 
-            [
-                'title' => 'Ajout ou modification d\'un module'
-            ],
+            ['title' => 'Ajout ou modification d\'un module'],
             'input' => 
             [
                 [
@@ -108,12 +90,26 @@ class AdminModulomeController extends ModuleAdminController
         return parent::renderForm();
     }
 
+    /**
+     *
+     * @param int $object 
+     *                     
+     * @return varchar $chemin
+     */
+
     public function afterUpdate($object)
     {
         $image = $_FILES['modulome_image']['name'];
         $chemin = move_uploaded_file($_FILES['modulome_image']['tmp_name'], _PS_CORE_DIR_."\modules\js_modulome/views/images/".$image);
         return $chemin;
     }
+
+    /**
+     *
+     * @param int $object 
+     *                     
+     * @return varchar $chemin
+     */
 
     public function afterAdd($object)
     {
@@ -139,6 +135,12 @@ class AdminModulomeController extends ModuleAdminController
 
     }
 
+    /**
+     *
+     * @param int $cat_id 
+     *                     
+     * @return varchar $cat_name
+     */
     static function catname($cat_id)
     {
         $categorie = new Categorie($cat_id);
